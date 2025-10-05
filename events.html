@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events Attended</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header"><h2>Rewards</h2></div>
+            <ul class="sidebar-nav">
+                <li><a href="dashboard.html">📊 Dashboard</a></li>
+                <li><a href="courses.html">📚 Courses Enrolled</a></li>
+                <li><a href="events.html" class="active">🎉 Events Attended</a></li>
+                <li><a href="points.html">⭐ Points Secured</a></li>
+                <li><a href="feedback.html">📧 Feedback</a></li>
+                <li class="logout"><a href="index.html">🚪 Logout</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <h1>Events Attended</h1>
+
+            <div class="content-card">
+                <h2>Online Workshops</h2>
+                <table class="data-table">
+                     <thead>
+                        <tr>
+                            <th>Event Name</th>
+                            <th>Date</th>
+                            <th>Points</th>
+                        </tr>
+                    </thead>
+                    <tbody id="workshops-tbody">
+                        </tbody>
+                </table>
+            </div>
+
+            <div class="content-card">
+                <h2>Paper Presentations</h2>
+                <table class="data-table">
+                     <thead>
+                        <tr>
+                            <th>Event Name</th>
+                            <th>Date</th>
+                            <th>Points</th>
+                        </tr>
+                    </thead>
+                    <tbody id="presentations-tbody">
+                        </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const studentId = localStorage.getItem('studentId');
+            if (!studentId) {
+                window.location.href = 'index.html';
+                return;
+            }
+    
+            const workshopsTbody = document.querySelector('#workshops-tbody');
+            const presentationsTbody = document.querySelector('#presentations-tbody');
+    
+            try {
+                // 1. Fetch data from the new events endpoint
+                const response = await fetch(`http://localhost:3000/api/events/${studentId}`);
+                const events = await response.json();
+    
+                // 2. Loop through the events and sort them into the correct tables
+                events.forEach(event => {
+                    const row = `
+                        <tr>
+                            <td>${event.event_name}</td>
+                            <td>${event.date_attended}</td>
+                            <td>${event.points_awarded}</td>
+                        </tr>
+                    `;
+    
+                    if (event.event_type === 'Online Workshop') {
+                        workshopsTbody.innerHTML += row;
+                    } else if (event.event_type === 'Paper Presentation') {
+                        presentationsTbody.innerHTML += row;
+                    }
+                });
+    
+            } catch (error) {
+                console.error('Failed to fetch events:', error);
+                workshopsTbody.innerHTML = '<tr><td colspan="3">Could not load data.</td></tr>';
+                presentationsTbody.innerHTML = '<tr><td colspan="3">Could not load data.</td></tr>';
+            }
+        });
+    </script>
+</body>
+</html>

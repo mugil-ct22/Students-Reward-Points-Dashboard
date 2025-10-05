@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Points Secured</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header"><h2>Rewards</h2></div>
+            <ul class="sidebar-nav">
+                <li><a href="dashboard.html">📊 Dashboard</a></li>
+                <li><a href="courses.html">📚 Courses Enrolled</a></li>
+                <li><a href="events.html">🎉 Events Attended</a></li>
+                <li><a href="points.html" class="active">⭐ Points Secured</a></li>
+                <li><a href="feedback.html">📧 Feedback</a></li>
+                <li class="logout"><a href="index.html">🚪 Logout</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <h1>Points Secured</h1>
+            <div class="content-card">
+                <h2>Points Breakdown by Course</h2>
+                <p>This table shows the reward points you have earned from events, applied to each course.</p>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Course Name</th>
+                            <th>Event Participated</th>
+                            <th>Points Awarded</th>
+                        </tr>
+                    </thead>
+                    <tbody id="points-tbody">
+                        </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const studentId = localStorage.getItem('studentId');
+            if (!studentId) {
+                window.location.href = 'index.html';
+                return;
+            }
+    
+            const pointsTbody = document.querySelector('#points-tbody');
+            pointsTbody.innerHTML = ''; // Clear any placeholders
+    
+            try {
+                // 1. Fetch data from the correct points endpoint
+                const response = await fetch(`http://localhost:3000/api/points/${studentId}`);
+                const pointsData = await response.json();
+                
+                let totalPoints = 0;
+    
+                // 2. Loop through the data and create a row for each item
+                pointsData.forEach(item => {
+                    const row = `
+                        <tr>
+                            <td>${item.course_name}</td>
+                            <td>${item.event_name}</td>
+                            <td>${item.points_awarded}</td>
+                        </tr>
+                    `;
+                    pointsTbody.innerHTML += row;
+                    totalPoints += item.points_awarded; // Add to the total
+                });
+    
+                // 3. Add the final "Total" row
+                const totalRow = `
+                    <tr>
+                        <td colspan="2"><strong>Total Points</strong></td>
+                        <td><strong>${totalPoints}</strong></td>
+                    </tr>
+                `;
+                pointsTbody.innerHTML += totalRow;
+    
+            } catch (error) {
+                console.error('Failed to fetch points:', error);
+                pointsTbody.innerHTML = '<tr><td colspan="3">Could not load points data.</td></tr>';
+            }
+        });
+    </script>
+</body>
+</html>

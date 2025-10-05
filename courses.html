@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses Enrolled</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+             <div class="sidebar-header"><h2>Rewards</h2></div>
+            <ul class="sidebar-nav">
+                <li><a href="dashboard.html">📊 Dashboard</a></li>
+                <li><a href="courses.html" class="active">📚 Courses Enrolled</a></li>
+                <li><a href="events.html">🎉 Events Attended</a></li>
+                <li><a href="points.html">⭐ Points Secured</a></li>
+                <li><a href="feedback.html">📧 Feedback</a></li>
+                <li class="logout"><a href="index.html">🚪 Logout</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <h1>Courses Enrolled</h1>
+            
+            <div class="content-card">
+                <h2>Main Courses</h2>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Course Name</th>
+                        </tr>
+                    </thead>
+                    <tbody id="main-courses-tbody">
+                        </tbody>
+                </table>
+            </div>
+
+            <div class="content-card">
+                <h2>Elective Courses</h2>
+                 <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Course Name</th>
+                        </tr>
+                    </thead>
+                    <tbody id="elective-courses-tbody">
+                        </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const studentId = localStorage.getItem('studentId');
+            if (!studentId) {
+                // If not logged in, redirect to login page
+                window.location.href = 'index.html';
+                return;
+            }
+    
+            const mainCoursesTbody = document.querySelector('#main-courses-tbody');
+            const electiveCoursesTbody = document.querySelector('#elective-courses-tbody');
+    
+            try {
+                const response = await fetch(`http://localhost:3000/api/courses/${studentId}`);
+                const courses = await response.json();
+                
+                courses.forEach(course => {
+                    // Note: The original file had two columns, but the JS only populates one.
+                    // This version is simplified to match the script's output.
+                    const row = `<tr><td>${course.course_name}</td></tr>`;
+                    if (course.course_type === 'Main') {
+                        mainCoursesTbody.innerHTML += row;
+                    } else {
+                        electiveCoursesTbody.innerHTML += row;
+                    }
+                });
+    
+            } catch (error) {
+                console.error('Failed to fetch courses:', error);
+                mainCoursesTbody.innerHTML = '<tr><td>Could not load courses.</td></tr>';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Points Secured</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header"><h2>Rewards</h2></div>
+            <ul class="sidebar-nav">
+                <li><a href="dashboard.html">📊 Dashboard</a></li>
+                <li><a href="courses.html">📚 Courses Enrolled</a></li>
+                <li><a href="events.html">🎉 Events Attended</a></li>
+                <li><a href="points.html" class="active">⭐ Points Secured</a></li>
+                <li><a href="feedback.html">📧 Feedback</a></li>
+                <li class="logout"><a href="index.html">🚪 Logout</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <h1>Points Secured</h1>
+            <div class="content-card">
+                <h2>Points Breakdown by Course</h2>
+                <p>This table shows the reward points you have earned from events, applied to each course.</p>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Course Name</th>
+                            <th>Event Participated</th>
+                            <th>Points Awarded</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Introduction to Programming</td><td>Machine Learning Basics</td><td>25</td></tr>
+                        <tr><td>Introduction to Programming</td><td>AI in Healthcare</td><td>30</td></tr>
+                        <tr><td>Artificial Intelligence</td><td>Advanced Web Development</td><td>20</td></tr>
+                         <tr><td>Linear Algebra</td><td>AI in Healthcare</td><td>30</td></tr>
+                        <tr><td>Classical Mechanics</td><td>Machine Learning Basics</td><td>15</td></tr>
+                        <tr>
+                            <td colspan="2"><strong>Total Points</strong></td>
+                            <td><strong>120</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
